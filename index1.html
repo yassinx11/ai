@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مترجم النصوص العربي الأردو</title>
+    <title>عربی اردو متن کا مترجم-مترجم النصوص العربي الأردو</title>
     <style>
         * {
             margin: 0;
@@ -273,16 +273,16 @@
 </head>
 <body>
     <div class="container">
-        <h1>🌟 مترجم النصوص العربي الأردو 🌟</h1>
+        <h1>🌟 عربی اردو متن کا مترجم-مترجم النصوص العربي الأردو 🌟</h1>
         
         <form id="translationForm">
             <div class="form-group">
-                <label for="userInput">اكتب هنا بالأردو أو بالعربي:</label>
+                <label for="userInput">اكتب هنا بالأردو أو بالعربي-اردو یا عربی میں یہاں لکھیں:</label>
                 <div class="input-container">
                     <textarea 
                         id="userInput" 
                         name="userInput" 
-                        placeholder="أدخل النص هنا للترجمة..."
+                        placeholder="أدخل النص هنا للترجمة...-یہاں متن درج کریں ترجمے کے لیے..."
                         required
                         maxlength="1000"
                     ></textarea>
@@ -300,7 +300,7 @@
 
             <div class="button-container">
                 <button type="submit" id="translateBtn">
-                    ترجم ✨
+                    ترجم-ترجمہ ✨
                 </button>
                 <button type="button" class="clear-btn" id="clearBtn">
                     مسح 🗑️
@@ -310,16 +310,16 @@
 
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p>جارٍ الترجمة...</p>
+            <p>جارٍ الترجمة...-ترجمہ جاری ہے...</p>
         </div>
 
         <div class="result" id="result" style="display: none;">
             <button class="copy-btn" id="copyBtn">نسخ</button>
             <div id="resultText"></div>
             <div class="stats">
-                <div>الكلمات: <span id="wordCount">0</span></div>
+                <div>الكلمات: -الفاظ:<span id="wordCount">0</span></div>
                 <div>الأحرف: <span id="charCountResult">0</span></div>
-                <div>وقت الترجمة: <span id="translationTime">0</span>ث</div>
+                <div>وقت الترجمة: -ترجمے کا وقت:<span id="translationTime">0</span>ث</div>
             </div>
         </div>
     </div>
@@ -353,7 +353,7 @@
         document.getElementById('copyBtn').addEventListener('click', function() {
             const resultText = document.getElementById('resultText').textContent;
             navigator.clipboard.writeText(resultText).then(function() {
-                showToast('تم نسخ النص بنجاح!');
+                showToast('تم نسخ النص بنجاح!-تم نے متن کا کامیابی سے نسخ کیا!');
             }).catch(function() {
                 // Fallback for older browsers
                 const textArea = document.createElement('textarea');
@@ -362,7 +362,7 @@
                 textArea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textArea);
-                showToast('تم نسخ النص بنجاح!');
+                showToast('تم نسخ النص بنجاح!-تم نے متن کا کامیابی سے نسخ کیا!');
             });
         });
 
@@ -382,7 +382,7 @@
             
             const userInput = document.getElementById('userInput').value.trim();
             if (!userInput) {
-                showToast('الرجاء إدخال نص للترجمة');
+                showToast('الرجاء إدخال نص للترجمة-براہ کرم ترجمے کے لیے کوئی متن داخل کریں');
                 return;
             }
 
@@ -420,7 +420,7 @@
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`خطأ في الشبكة: ${response.status} ${response.statusText}`);
+                    throw new Error(`خطأ في الشبكة:-نیٹ ورک میں غلطی: ${response.status} ${response.statusText}`);
                 }
                 return response.json();
             })
@@ -445,12 +445,12 @@
                     // Smooth scroll to result
                     result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 } else {
-                    throw new Error('استجابة غير صالحة من الخادم');
+                    throw new Error('استجابة غير صالحة من الخادم-سروَر سے غلط جواب');
                 }
             })
             .catch(error => {
                 console.error('Translation error:', error);
-                resultText.textContent = `حدث خطأ في الترجمة: ${error.message}`;
+                resultText.textContent = `حدث خطأ في الترجمة:-ترجمے میں ایک غلطی ہوئی: ${error.message}`;
                 result.className = 'result error';
                 result.style.display = 'block';
                 
@@ -460,7 +460,7 @@
             .finally(() => {
                 // Reset button state
                 translateBtn.disabled = false;
-                translateBtn.textContent = 'ترجم ✨';
+                translateBtn.textContent = 'ترجم-ترجمہ ✨';
                 loading.style.display = 'none';
             });
         });
