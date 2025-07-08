@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مترجم النصوص العربي الأردو</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #555;
+            font-size: 1.1em;
+        }
+
+        .input-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            resize: vertical;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            direction: rtl;
+            text-align: right;
+        }
+
+        textarea:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: scale(1.02);
+        }
+
+        .char-count {
+            position: absolute;
+            bottom: 10px;
+            left: 15px;
+            font-size: 12px;
+            color: #888;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .clear-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+        }
+
+        .clear-btn:hover {
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result {
+            background: rgba(246, 248, 250, 0.9);
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 100px;
+            font-size: 16px;
+            line-height: 1.6;
+            direction: rtl;
+            text-align: right;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .result.success {
+            border-color: #4caf50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .result.error {
+            border-color: #f44336;
+            background: rgba(244, 67, 54, 0.1);
+            color: #d32f2f;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border: 1px solid #667eea;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .language-indicator {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .language-arrow {
+            font-size: 20px;
+            margin: 0 10px;
+            color: #667eea;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .button-container {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            display: none;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌟 مترجم النصوص العربي الأردو 🌟</h1>
+        
+        <form id="translationForm">
+            <div class="form-group">
+                <label for="userInput">اكتب هنا بالأردو أو بالعربي:</label>
+                <div class="input-container">
+                    <textarea 
+                        id="userInput" 
+                        name="userInput" 
+                        placeholder="أدخل النص هنا للترجمة..."
+                        required
+                        maxlength="1000"
+                    ></textarea>
+                    <div class="char-count">
+                        <span id="charCount">0</span>/1000
+                    </div>
+                </div>
+            </div>
+
+            <div class="language-indicator">
+                <span>عربي</span>
+                <span class="language-arrow">⟷</span>
+                <span>اردو</span>
+            </div>
+
+            <div class="button-container">
+                <button type="submit" id="translateBtn">
+                    ترجم ✨
+                </button>
+                <button type="button" class="clear-btn" id="clearBtn">
+                    مسح 🗑️
+                </button>
+            </div>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>جارٍ الترجمة...</p>
+        </div>
+
+        <div class="result" id="result" style="display: none;">
+            <button class="copy-btn" id="copyBtn">نسخ</button>
+            <div id="resultText"></div>
+            <div class="stats">
+                <div>الكلمات: <span id="wordCount">0</span></div>
+                <div>الأحرف: <span id="charCountResult">0</span></div>
+                <div>وقت الترجمة: <span id="translationTime">0</span>ث</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let translationStartTime;
+        
+        // Character counter
+        document.getElementById('userInput').addEventListener('input', function() {
+            const text = this.value;
+            const charCount = text.length;
+            document.getElementById('charCount').textContent = charCount;
+            
+            if (charCount > 800) {
+                document.getElementById('charCount').style.color = '#f44336';
+            } else {
+                document.getElementById('charCount').style.color = '#888';
+            }
+        });
+
+        // Clear button
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            document.getElementById('userInput').value = '';
+            document.getElementById('charCount').textContent = '0';
+            document.getElementById('result').style.display = 'none';
+        });
+
+        // Copy button
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            const resultText = document.getElementById('resultText').textContent;
+            navigator.clipboard.writeText(resultText).then(function() {
+                showToast('تم نسخ النص بنجاح!');
+            }).catch(function() {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = resultText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('تم نسخ النص بنجاح!');
+            });
+        });
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Translation form
+        document.getElementById('translationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const userInput = document.getElementById('userInput').value.trim();
+            if (!userInput) {
+                showToast('الرجاء إدخال نص للترجمة');
+                return;
+            }
+
+            const translateBtn = document.getElementById('translateBtn');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            const resultText = document.getElementById('resultText');
+            
+            // Show loading state
+            translateBtn.disabled = true;
+            translateBtn.textContent = 'جارٍ الترجمة...';
+            loading.style.display = 'block';
+            result.style.display = 'none';
+            translationStartTime = Date.now();
+
+            const apiKey = "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";
+            const instruction = "ترجم النص التالي من الأردو إلى العربي أو من العربي إلى الأردو حسب اللغة المكتشفة. قدم الترجمة فقط دون أي تعليق إضافي: ";
+            const prompt = instruction + userInput;
+
+            fetch("https://openrouter.ai/api/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${apiKey}`,
+                    "Content-Type": "application/json",
+                    "X-Title": "Arabic-Urdu-Translator"
+                },
+                body: JSON.stringify({
+                    "model": "deepseek/deepseek-chat:free",
+                    "messages": [
+                        {"role": "user", "content": prompt}
+                    ],
+                    "max_tokens": 500,
+                    "temperature": 0.3
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`خطأ في الشبكة: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const translationTime = ((Date.now() - translationStartTime) / 1000).toFixed(1);
+                
+                if (data.choices && data.choices[0] && data.choices[0].message) {
+                    const translatedText = data.choices[0].message.content.trim();
+                    resultText.textContent = translatedText;
+                    
+                    // Update stats
+                    const wordCount = translatedText.split(/\s+/).filter(word => word.length > 0).length;
+                    const charCount = translatedText.length;
+                    
+                    document.getElementById('wordCount').textContent = wordCount;
+                    document.getElementById('charCountResult').textContent = charCount;
+                    document.getElementById('translationTime').textContent = translationTime;
+                    
+                    result.className = 'result success';
+                    result.style.display = 'block';
+                    
+                    // Smooth scroll to result
+                    result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    throw new Error('استجابة غير صالحة من الخادم');
+                }
+            })
+            .catch(error => {
+                console.error('Translation error:', error);
+                resultText.textContent = `حدث خطأ في الترجمة: ${error.message}`;
+                result.className = 'result error';
+                result.style.display = 'block';
+                
+                // Hide stats for error
+                document.querySelector('.stats').style.display = 'none';
+            })
+            .finally(() => {
+                // Reset button state
+                translateBtn.disabled = false;
+                translateBtn.textContent = 'ترجم ✨';
+                loading.style.display = 'none';
+            });
+        });
+
+        // Add keyboard shortcut (Ctrl+Enter to translate)
+        document.getElementById('userInput').addEventListener('keydown', function(event) {
+            if (event.ctrlKey && event.key === 'Enter') {
+                event.preventDefault();
+                document.getElementById('translationForm').dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Auto-resize textarea
+        document.getElementById('userInput').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+    </script>
+</body>
+</html>
